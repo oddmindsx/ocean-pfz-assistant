@@ -3,6 +3,7 @@ import ChatWindow from "./components/ChatWindow";
 import MapPanel from "./components/MapPanel";
 import SafetyBadge from "./components/SafetyBadge";
 import EvidenceCard from "./components/EvidenceCard";
+import MarineWatchPanel from "./components/MarineWatchPanel";
 import { sendMessage } from "./services/api";
 import { Anchor, Waves, Radio, Activity } from "lucide-react";
 
@@ -127,6 +128,7 @@ export default function App() {
           <div className="panel-side-cards">
             <SafetyBadge safety={safety} />
             <EvidenceCard evidence={evidence} />
+            <MarineWatchPanel />
           </div>
         </section>
 
