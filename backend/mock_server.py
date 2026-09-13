@@ -1,5 +1,5 @@
 """
-SagarDrishti - FastAPI Backend Mock Companion (M1, M2, M3 baseline)
+OCRA - FastAPI Backend Mock Companion (M1, M2, M3 baseline)
 Implements:
 - POST /chat: Request/response schema matching M1 & M2
 - GET /layers/{layer_id}/{date}.geojson: GeoJSON layer serving matching M3
@@ -7,15 +7,20 @@ Implements:
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from pydantic import BaseModel
+from typing import Optional, List
 import json
 import os
 
-app = FastAPI(title="SagarDrishti Ocean Advisor API", version="1.0.0")
+from Planner import query
+from Ocean_stub import get_pfz
+from Weather_stub import get_weather, get_wave
+from Reasoning import evaluate
+
+app = FastAPI()
 
 # Enable CORS for Vite frontend
-app.add_middleware(
+app.add_middleware( 
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
