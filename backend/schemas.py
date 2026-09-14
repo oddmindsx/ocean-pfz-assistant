@@ -1,7 +1,7 @@
 """
-Common schema shared across the team (M1-M5).
-Everyone should import from here instead of redefining models,
-so M2/M3/M4 agents plug straight into the same shape.
+Common schema shared across the team (M1-M4).
+Frontend (M4) and downstream agents (M2/M3) should import from here instead
+of redefining models, so everyone plugs into the same contract.
 """
 
 from typing import List, Optional, Any, Dict
@@ -15,19 +15,24 @@ class Location(BaseModel):
 
 
 class ChatContext(BaseModel):
-    """Resolved context passed down to planner/agents after parsing the message."""
+    """Resolved context passed down to the planner/agents after parsing the message."""
     location: Location
-    date: str  # ISO date string, e.g. "2026-09-12"
+    location_source: str
+    # "device_gps" | "gazetteer_exact" | "gazetteer_fuzzy" |
+    # "carried_over_from_session" | "default_fallback"
+    date: str  # ISO date string, e.g. "2026-09-14"
     intent: str  # PFZ_QUERY | SAFETY_CHECK | OTHER
-    language: str  # ISO 639-1 code, e.g. "en", "hi", "ml"
+    intent_confidence: float  # 0-1
+    language: str  # ISO 639-1 code, e.g. "en", "hi", "mr", "ta"
+    matched_keywords: List[str] = Field(default_factory=list)
     raw_message: str
 
 
 class ChatRequest(BaseModel):
     message: str
     user_id: Optional[str] = None
-    # Optional overrides — if the frontend already knows the user's location/date
-    # (e.g. from GPS or a date picker), it can pass them and we skip extraction.
+    # Live device GPS — always send this from the frontend when available.
+    # It takes priority over any text-based location extraction.
     location: Optional[Location] = None
     date: Optional[str] = None
 
@@ -36,12 +41,14 @@ class SafetyInfo(BaseModel):
     status: str = "unknown"       # "safe" | "caution" | "unsafe" | "unknown"
     reason: str = ""
     alerts: List[str] = Field(default_factory=list)
+    is_live: bool = False  # False until a real weather/ocean data source is wired in
 
 
 class EvidenceItem(BaseModel):
     source: str
     summary: str
     value: Optional[Any] = None
+    is_live: bool = False  # False = synthetic/stub data, not a real reading
 
 
 class MapLayer(BaseModel):
