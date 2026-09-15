@@ -1,0 +1,631 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "SST, Chlorophyll, Wind Speed - Multi-Region (PLACEHOLDER)",
+    "date": "2026-09-16",
+    "source": "PLACEHOLDER DATA - not real INCOIS/ISRO readings",
+    "note": "These values are realistic-range mock data only, generated because INCOIS does not publicly expose numeric SST/Chlorophyll/Wind values without an approved MOSDAC (ISRO) account. Replace with real values once account is approved. Do not present this as real government data."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Palghar",
+        "date": "2026-09-16",
+        "sst_c": 28.6,
+        "chlorophyll_mg_m3": 0.22,
+        "wind_speed_ms": 4.7,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.76,
+          19.7
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Raigarh",
+        "date": "2026-09-16",
+        "sst_c": 26.9,
+        "chlorophyll_mg_m3": 3.71,
+        "wind_speed_ms": 7.1,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.12,
+          18.43
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Ratnagiri",
+        "date": "2026-09-16",
+        "sst_c": 29.6,
+        "chlorophyll_mg_m3": 0.53,
+        "wind_speed_ms": 5.5,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.3,
+          16.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Sindhudurg",
+        "date": "2026-09-16",
+        "sst_c": 26.1,
+        "chlorophyll_mg_m3": 1.17,
+        "wind_speed_ms": 6.0,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.45,
+          16.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Thane, Mumbai Suburban, Mumbai City",
+        "date": "2026-09-16",
+        "sst_c": 26.1,
+        "chlorophyll_mg_m3": 1.07,
+        "wind_speed_ms": 6.9,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87,
+          19.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Chennai",
+        "date": "2026-09-16",
+        "sst_c": 28.2,
+        "chlorophyll_mg_m3": 1.18,
+        "wind_speed_ms": 6.5,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.27,
+          13.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Cuddalore",
+        "date": "2026-09-16",
+        "sst_c": 29.2,
+        "chlorophyll_mg_m3": 0.13,
+        "wind_speed_ms": 7.8,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.75,
+          11.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Kancheepuram",
+        "date": "2026-09-16",
+        "sst_c": 28.8,
+        "chlorophyll_mg_m3": 1.77,
+        "wind_speed_ms": 3.9,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.19,
+          12.62
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Kanniyakumari",
+        "date": "2026-09-16",
+        "sst_c": 29.8,
+        "chlorophyll_mg_m3": 1.75,
+        "wind_speed_ms": 3.6,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.54,
+          8.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Nagappattinam South",
+        "date": "2026-09-16",
+        "sst_c": 26.4,
+        "chlorophyll_mg_m3": 4.25,
+        "wind_speed_ms": 6.6,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.75,
+          10.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Ramanathapuram",
+        "date": "2026-09-16",
+        "sst_c": 29.2,
+        "chlorophyll_mg_m3": 3.68,
+        "wind_speed_ms": 6.2,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.83,
+          9.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Thiruvallur",
+        "date": "2026-09-16",
+        "sst_c": 29.9,
+        "chlorophyll_mg_m3": 1.95,
+        "wind_speed_ms": 6.3,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.32,
+          13.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Thoothukkudi",
+        "date": "2026-09-16",
+        "sst_c": 29.3,
+        "chlorophyll_mg_m3": 3.13,
+        "wind_speed_ms": 8.2,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.13,
+          8.76
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Viluppuram",
+        "date": "2026-09-16",
+        "sst_c": 28.3,
+        "chlorophyll_mg_m3": 3.55,
+        "wind_speed_ms": 3.3,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.95,
+          11.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Devbhumi Dwaraka",
+        "date": "2026-09-16",
+        "sst_c": 26.9,
+        "chlorophyll_mg_m3": 1.52,
+        "wind_speed_ms": 3.5,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          68.97,
+          22.24
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Gir Somnath",
+        "date": "2026-09-16",
+        "sst_c": 26.9,
+        "chlorophyll_mg_m3": 0.59,
+        "wind_speed_ms": 4.7,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.4,
+          20.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Porbandar",
+        "date": "2026-09-16",
+        "sst_c": 28.5,
+        "chlorophyll_mg_m3": 1.89,
+        "wind_speed_ms": 5.2,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.61,
+          21.64
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Kachchh",
+        "date": "2026-09-16",
+        "sst_c": 26.8,
+        "chlorophyll_mg_m3": 1.41,
+        "wind_speed_ms": 8.6,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.7,
+          22.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Surat",
+        "date": "2026-09-16",
+        "sst_c": 28.6,
+        "chlorophyll_mg_m3": 3.08,
+        "wind_speed_ms": 4.0,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          21.17
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "North 24 Parganas",
+        "date": "2026-09-16",
+        "sst_c": 28.9,
+        "chlorophyll_mg_m3": 0.9,
+        "wind_speed_ms": 5.3,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.85,
+          22.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "Purba Medinipur",
+        "date": "2026-09-16",
+        "sst_c": 30.0,
+        "chlorophyll_mg_m3": 3.24,
+        "wind_speed_ms": 6.3,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.51,
+          21.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "South 24 Parganas",
+        "date": "2026-09-16",
+        "sst_c": 28.7,
+        "chlorophyll_mg_m3": 4.23,
+        "wind_speed_ms": 7.7,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.3,
+          21.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Alappuzha",
+        "date": "2026-09-16",
+        "sst_c": 26.9,
+        "chlorophyll_mg_m3": 0.26,
+        "wind_speed_ms": 4.9,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.33,
+          9.49
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Ernakulam",
+        "date": "2026-09-16",
+        "sst_c": 27.1,
+        "chlorophyll_mg_m3": 1.13,
+        "wind_speed_ms": 8.7,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.24,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kannur",
+        "date": "2026-09-16",
+        "sst_c": 29.5,
+        "chlorophyll_mg_m3": 1.64,
+        "wind_speed_ms": 6.9,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.37,
+          11.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kollam",
+        "date": "2026-09-16",
+        "sst_c": 27.6,
+        "chlorophyll_mg_m3": 4.58,
+        "wind_speed_ms": 5.8,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.6,
+          8.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kozhikode",
+        "date": "2026-09-16",
+        "sst_c": 27.1,
+        "chlorophyll_mg_m3": 1.31,
+        "wind_speed_ms": 6.4,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.77,
+          11.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Thiruvananthapuram",
+        "date": "2026-09-16",
+        "sst_c": 27.1,
+        "chlorophyll_mg_m3": 2.96,
+        "wind_speed_ms": 8.4,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.95,
+          8.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Thrissur",
+        "date": "2026-09-16",
+        "sst_c": 27.6,
+        "chlorophyll_mg_m3": 1.17,
+        "wind_speed_ms": 9.0,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.1,
+          10.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Goa",
+        "district": "North Goa",
+        "date": "2026-09-16",
+        "sst_c": 28.0,
+        "chlorophyll_mg_m3": 0.55,
+        "wind_speed_ms": 3.3,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.75,
+          15.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Goa",
+        "district": "South Goa",
+        "date": "2026-09-16",
+        "sst_c": 26.4,
+        "chlorophyll_mg_m3": 3.17,
+        "wind_speed_ms": 7.8,
+        "source": "PLACEHOLDER - not from INCOIS/ISRO. Realistic-range mock values pending MOSDAC account approval.",
+        "status": "PLACEHOLDER - replace with real MOSDAC/INCOIS values once available"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.95,
+          15.25
+        ]
+      }
+    }
+  ]
+}
