@@ -1,0 +1,914 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "Coastal Wave/Swell Surge Advisory - Multi-Region",
+    "issue_date": "2026-09-15",
+    "source": "INCOIS High Wave/Swell Surge Advisories, Ministry of Earth Sciences, Govt of India",
+    "note": "wave_height_m and wave_period_s are forecast RANGES as issued by INCOIS, not single-point measurements. Coordinates are approximate district coastal centroids, not precise buoy locations."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Palghar",
+        "coast_segment": "Zai To Vasai",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.7-0.8",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.76,
+          19.7
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Raigarh",
+        "coast_segment": "Ulwa Moha To Bagmandla",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "16.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.12,
+          18.43
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Ratnagiri",
+        "coast_segment": "Veshawi-Bankot To Jambhari",
+        "threat_level": "ALERT",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.9-1.0",
+        "wave_period_s": "16.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.3,
+          16.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Sindhudurg",
+        "coast_segment": "Vijayadurg Hr To Terekhol",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.7-0.8",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.45,
+          16.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Maharashtra",
+        "district": "Thane, Mumbai Suburban, Mumbai City",
+        "coast_segment": "Dongi Point To Belapur",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87,
+          19.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Chennai",
+        "coast_segment": "Palavakkam To Lakshmipuram Odaikuppam",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.3-0.4",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.27,
+          13.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Cuddalore",
+        "coast_segment": "Killai To Moorthipudukuppam",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.2-0.3",
+        "wave_period_s": "13.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.75,
+          11.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Kancheepuram",
+        "coast_segment": "Alambaraikuppam To Chinna Neelankarai",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.3-0.4",
+        "wave_period_s": "16.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.19,
+          12.62
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Kanniyakumari",
+        "coast_segment": "Neerodi To Arockiyapuram",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.3-1.4",
+        "wave_period_s": "14.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.54,
+          8.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Nagappattinam South",
+        "coast_segment": "Point Calimer To Samanthanpettai",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.1-0.2",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.75,
+          10.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Ramanathapuram",
+        "coast_segment": "Rojma Nagar To Theerthaandathanam",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.3-1.4",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.83,
+          9.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Thiruvallur",
+        "coast_segment": "Royapuram To Pulicat",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.3-0.4",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.32,
+          13.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Thiruvarur",
+        "coast_segment": "Thambikottai To Muthupet",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.1-0.1",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.65,
+          10.77
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Thoothukkudi",
+        "coast_segment": "Periyathalai To Vembar",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.2-1.4",
+        "wave_period_s": "16.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          78.13,
+          8.76
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Tirunelveli",
+        "coast_segment": "Kuttapulli To Kooduthalai",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.3-1.5",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.6,
+          8.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Tamil Nadu",
+        "district": "Viluppuram",
+        "coast_segment": "Vaithikuppam To Muttukaduazhagankuppam",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.3-0.4",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.95,
+          11.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Amreli",
+        "coast_segment": "Rohisha To Patva",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "14.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.37,
+          20.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Bharuch",
+        "coast_segment": "Surwada To Kanthiajal",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.1-0.2",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9,
+          21.6
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Bhavnagar",
+        "coast_segment": "Gadhada To Kamatalav",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.7-0.8",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.15,
+          21.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Devbhumi Dwaraka",
+        "coast_segment": "Vadinar To Harshad Miyani",
+        "threat_level": "WATCH",
+        "alert_type": "HIGH WAVE",
+        "wave_height_m": "2.5-3.2",
+        "wave_period_s": null,
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          68.97,
+          22.24
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Gir Somnath",
+        "coast_segment": "Adri To Mul Dwaraka",
+        "threat_level": "WATCH",
+        "alert_type": "HIGH WAVE",
+        "wave_height_m": "2.0-2.1",
+        "wave_period_s": null,
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.4,
+          20.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Junagadh North",
+        "coast_segment": "Shil To Chorwad",
+        "threat_level": "WATCH",
+        "alert_type": "HIGH WAVE",
+        "wave_height_m": "2.0-2.2",
+        "wave_period_s": null,
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.3,
+          21.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Junagadh South",
+        "coast_segment": "Nava Bandar To Saiyad Rajpara",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "14.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.15,
+          21.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Kachchh",
+        "coast_segment": "Lakhapat To Kandla",
+        "threat_level": "WATCH",
+        "alert_type": "HIGH WAVE",
+        "wave_height_m": "1.9-2.2",
+        "wave_period_s": null,
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.7,
+          22.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Navsari",
+        "coast_segment": "Dipla To Nani Danti",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.5-0.6",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.92,
+          20.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Porbandar",
+        "coast_segment": "Tukda Miyani To Madhavpur",
+        "threat_level": "WATCH",
+        "alert_type": "HIGH WAVE",
+        "wave_height_m": "2.3-2.6",
+        "wave_period_s": null,
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.61,
+          21.64
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Surat",
+        "coast_segment": "Kosamba (Mangelvad) To Bhimpur",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.5-0.6",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          21.17
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Valsad North",
+        "coast_segment": "Kakwadi To Umarsadi",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.5-0.6",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9,
+          20.6
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Gujarat",
+        "district": "Valsad South",
+        "coast_segment": "Kalai To Umargam",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          20.4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "North 24 Parganas",
+        "coast_segment": null,
+        "threat_level": "ALERT",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.1-1.2",
+        "wave_period_s": "15.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.85,
+          22.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "Purba Medinipur",
+        "coast_segment": "DighaMohanaF.F.T.A.(Digha) To Diamond Harbour",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "16.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.51,
+          21.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "West Bengal",
+        "district": "South 24 Parganas",
+        "coast_segment": "Kakdwip To Lothian Island",
+        "threat_level": "ALERT",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.1-1.2",
+        "wave_period_s": "16.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.3,
+          21.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Alappuzha",
+        "coast_segment": "Chellanum To AzheekalJetty",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.8-0.9",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.33,
+          9.49
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Ernakulam",
+        "coast_segment": "Munambam FH To Maruvakad",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.24,
+          9.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kannur",
+        "coast_segment": "Valapattanam To New Mahe",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.37,
+          11.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kasaragod, Kannur",
+        "coast_segment": "Kunzhathur To Kotte Kunnu",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.7-0.8",
+        "wave_period_s": "16.0-18.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.2,
+          12.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kollam",
+        "coast_segment": "Alappattu To Edava",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.9-1.0",
+        "wave_period_s": "14.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.6,
+          8.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Kozhikode",
+        "coast_segment": "Chombala FH To Ramanattukara",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.77,
+          11.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Malappuram",
+        "coast_segment": "Kadaludinagaram To Palappetty",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-17.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.85,
+          11.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Thiruvananthapuram",
+        "coast_segment": "Kappil To Pozhiyoor",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "1.0-1.1",
+        "wave_period_s": "14.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.95,
+          8.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Kerala",
+        "district": "Thrissur",
+        "coast_segment": "Attupuram To Kodungallur",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.1,
+          10.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Goa",
+        "district": "North Goa",
+        "coast_segment": "Chapora To Panaji (Malim)",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.7-0.8",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.75,
+          15.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "state": "Goa",
+        "district": "South Goa",
+        "coast_segment": "Santerem Pt (Vasco) To Kolamb",
+        "threat_level": "WATCH",
+        "alert_type": "SWELL SURGE",
+        "wave_height_m": "0.6-0.7",
+        "wave_period_s": "15.0-16.0",
+        "issue_date": "2026-09-15",
+        "source": "INCOIS High Wave/Swell Surge Advisory (incois.gov.in/site/services/hwa.jsp)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.95,
+          15.25
+        ]
+      }
+    }
+  ]
+}

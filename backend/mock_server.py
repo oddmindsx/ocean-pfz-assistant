@@ -1,16 +1,12 @@
 """
-ORCA Marine Intelligence Platform — M1: FastAPI app + Conversation Agent.
+ORCA Marine Intelligence Platform - M1: FastAPI app + Conversation Agent.
 
 Run (matches the team run command):
     python -m uvicorn mock_server:app --port 8000 --reload
-
-Test:
-    curl -X POST http://localhost:8000/chat \
-      -H "Content-Type: application/json" \
-      -d '{"message": "Is it safe to venture into the sea tomorrow near Kochi?", "user_id": "demo"}'
-
-    curl http://localhost:8000/layers/pfz/2026-09-14.geojson
 """
+
+import os
+import json
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,12 +20,10 @@ from conversation_agent import (
     get_default_date,
 )
 from planner import run_planner
-from layers import get_layer, VALID_LAYERS
+from layer import get_layer, VALID_LAYERS
 
 app = FastAPI(title="ORCA Conversation API", version="0.2.0")
 
-# Wide open for hackathon dev — no auth by design per team decision.
-# Tighten allow_origins before a public deploy.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -37,10 +31,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory multi-turn session store: {user_id: {"location": Location, "date": str}}.
-# Good enough for a single-process hackathon demo — lets "and tomorrow?" work
-# without re-specifying location. Swap for Redis/DB before running >1 worker
-# or needing sessions to survive a restart.
 _SESSIONS: dict = {}
 
 
@@ -57,7 +47,6 @@ def chat(req: ChatRequest) -> ChatResponse:
     language = detect_language(message)
     intent_result = classify_intent_with_confidence(message)
 
-    # Priority 1: live device GPS sent by the frontend for this request.
     if req.location is not None:
         location = req.location
         location_source = "device_gps"
@@ -67,11 +56,9 @@ def chat(req: ChatRequest) -> ChatResponse:
             location = Location(name=loc_dict["name"], lat=loc_dict["lat"], lon=loc_dict["lon"])
             location_source = loc_dict["method"]
         elif "location" in session:
-            # Priority 2: carry over location from earlier in this conversation
             location = session["location"]
             location_source = "carried_over_from_session"
         else:
-            # Priority 3: last resort — Kochi default, clearly labeled as such
             location = Location(name=loc_dict["name"], lat=loc_dict["lat"], lon=loc_dict["lon"])
             location_source = loc_dict["method"]
 
@@ -105,6 +92,14 @@ def chat(req: ChatRequest) -> ChatResponse:
 
 @app.get("/layers/{layer_id}/{date}.geojson")
 def layers(layer_id: str, date: str, lat: float = 9.9312, lon: float = 76.2673):
+    if layer_id == "boundaries":
+        frontend_data_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "public", "data")
+        target_path = os.path.join(frontend_data_dir, "kerala_coastline.geojson")
+        if not os.path.exists(target_path):
+            raise HTTPException(status_code=404, detail="Coastline layer not found")
+        with open(target_path, "r", encoding="utf-8-sig") as f:
+            return json.load(f)
+
     if layer_id not in VALID_LAYERS:
         raise HTTPException(status_code=404, detail=f"Unknown layer_id. Valid: {sorted(VALID_LAYERS)}")
     return JSONResponse(get_layer(layer_id, date, lat, lon))
