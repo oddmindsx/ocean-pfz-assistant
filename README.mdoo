@@ -35,3 +35,4 @@ See docs/api_schema.md for the full /chat and /layers request/response schema.
 - Backend must always run on port 8000.
 - Frontend must always point to http://localhost:8000.
 - CORS must be enabled on the backend for local frontend requests to succeed.
+
