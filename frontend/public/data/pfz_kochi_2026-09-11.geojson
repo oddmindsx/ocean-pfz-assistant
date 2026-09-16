@@ -1,0 +1,99 @@
+{
+  "type": "FeatureCollection",
+  "name": "pfz_kochi_2026-09-11",
+  "properties": {
+    "date": "2026-09-11",
+    "region": "Kerala Central (Kochi)",
+    "source": "INCOIS / Ocean State Advisory Integration",
+    "advisory_type": "Potential Fishing Zone (PFZ)"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "PFZ-01",
+      "properties": {
+        "zone_name": "Kochi WSW Upwelling Core (Zone A)",
+        "distance_km": 18.5,
+        "direction": "WSW (248°)",
+        "depth_range": "38 - 52 m",
+        "sst_celsius": 28.3,
+        "chlorophyll_mg_m3": 1.48,
+        "fish_types": ["Indian Mackerel", "Oil Sardine", "Horse Mackerel"],
+        "confidence": "High (91%)",
+        "status": "Recommended",
+        "valid_until": "2026-09-12 18:00 IST",
+        "thermal_gradient": "Strong thermal front boundary"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.92, 9.82],
+            [76.10, 9.85],
+            [76.14, 10.04],
+            [75.98, 10.06],
+            [75.92, 9.82]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PFZ-02",
+      "properties": {
+        "zone_name": "Chellanam-Alappuzha Shelf Edge (Zone B)",
+        "distance_km": 24.2,
+        "direction": "SW (220°)",
+        "depth_range": "45 - 65 m",
+        "sst_celsius": 28.1,
+        "chlorophyll_mg_m3": 1.72,
+        "fish_types": ["Skipjack Tuna", "Ribbon Fish", "Carangids"],
+        "confidence": "Very High (94%)",
+        "status": "Recommended",
+        "valid_until": "2026-09-12 18:00 IST",
+        "thermal_gradient": "Coastal divergence zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.00, 9.58],
+            [76.16, 9.62],
+            [76.12, 9.78],
+            [75.96, 9.74],
+            [76.00, 9.58]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PFZ-03",
+      "properties": {
+        "zone_name": "Munambam Northwest Shelf (Zone C)",
+        "distance_km": 21.0,
+        "direction": "WNW (285°)",
+        "depth_range": "35 - 48 m",
+        "sst_celsius": 28.4,
+        "chlorophyll_mg_m3": 1.35,
+        "fish_types": ["Anchovies", "Silver Pomfret", "Squid"],
+        "confidence": "Moderate (82%)",
+        "status": "Secondary",
+        "valid_until": "2026-09-12 18:00 IST",
+        "thermal_gradient": "Moderate frontal edge"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.88, 10.15],
+            [76.04, 10.18],
+            [76.00, 10.32],
+            [75.85, 10.28],
+            [75.88, 10.15]
+          ]
+        ]
+      }
+    }
+  ]
+}

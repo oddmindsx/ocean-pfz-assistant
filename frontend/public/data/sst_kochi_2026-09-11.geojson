@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "name": "sst_kochi_2026-09-11",
+  "properties": {
+    "date": "2026-09-11",
+    "parameter": "Sea Surface Temperature (°C)",
+    "source": "MODIS / INSAT-3D Thermal Infrared"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "temp_c": 28.1, "label": "28.1°C Upwelling Front" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.80, 9.50],
+            [76.10, 9.55],
+            [76.12, 10.20],
+            [75.82, 10.15],
+            [75.80, 9.50]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "temp_c": 28.6, "label": "28.6°C Transition Zone" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.10, 9.55],
+            [76.24, 9.60],
+            [76.22, 10.25],
+            [76.08, 10.20],
+            [76.10, 9.55]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "temp_c": 29.2, "label": "29.2°C Inshore Warm Band" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.24, 9.60],
+            [76.35, 9.65],
+            [76.30, 10.30],
+            [76.22, 10.25],
+            [76.24, 9.60]
+          ]
+        ]
+      }
+    }
+  ]
+}
