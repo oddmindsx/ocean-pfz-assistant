@@ -6,14 +6,14 @@ import { Wind, Waves, ArrowUpDown, Ship, Zap } from "lucide-react";
 // shape: { id, severity, icon, title, meta, body }
 // severity: 'safe' | 'caution' | 'danger'  (reuses the same three states as SafetyBadge)
 // icon: 'cyclone' | 'tsunami' | 'tide' | 'incident' | 'lightning'
-const defaultAlerts = [
+export const defaultAlerts = [
   {
     id: "mw1",
     severity: "danger",
     icon: "cyclone",
     title: "Cyclone Watch",
     meta: "2h ago",
-    body: "Depression forming ~180 km offshore, expected to intensify. Advisory pending from IMD.",
+    body: "A depression is forming about 180 km offshore and looks like it's strengthening. IMD hasn't issued a formal advisory yet, but worth keeping an eye on.",
   },
   {
     id: "mw2",
@@ -21,7 +21,7 @@ const defaultAlerts = [
     icon: "tsunami",
     title: "Tsunami Bulletin",
     meta: "—",
-    body: "No active tsunami warning for the Kerala coastline at this time.",
+    body: "Nothing to worry about here — no active tsunami warning anywhere along the Kerala coast right now.",
   },
   {
     id: "mw3",
@@ -29,7 +29,7 @@ const defaultAlerts = [
     icon: "tide",
     title: "High Tide",
     meta: "4:40 PM",
-    body: "1.8 m expected off Kochi. Low tide follows at 10:55 PM (0.4 m).",
+    body: "Expect around 1.8 m off Kochi this afternoon, easing to a 0.4 m low tide by 10:55 PM.",
   },
   {
     id: "mw4",
@@ -37,7 +37,7 @@ const defaultAlerts = [
     icon: "incident",
     title: "Vessel Incident",
     meta: "6h ago",
-    body: "Minor grounding reported near Kochi harbour mouth. Channel now clear.",
+    body: "A small boat briefly ran aground near the Kochi harbour mouth earlier — it's since been cleared and the channel is open again.",
   },
   {
     id: "mw5",
@@ -45,7 +45,7 @@ const defaultAlerts = [
     icon: "lightning",
     title: "Lightning Risk",
     meta: "Low",
-    body: "No thunderstorm cells detected within 50 km of Kochi.",
+    body: "Skies look calm — no thunderstorm cells detected within 50 km of Kochi.",
   },
 ];
 
