@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import ChatWindow from "./components/ChatWindow";
-import MapPanel from "./components/MapPanel";
-import SafetyBadge from "./components/SafetyBadge";
-import EvidenceCard from "./components/EvidenceCard";
-import MarineWatchPanel from "./components/MarineWatchPanel";
+import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import ChatPage from "./components/ChatPage";
+import MapPage from "./components/MapPage";
+import AdvisoriesPage from "./components/AdvisoriesPage";
+import AboutPage from "./components/AboutPage";
 import { sendMessage } from "./services/api";
-import { Anchor, Waves, Radio, Activity } from "lucide-react";
 
 export default function App() {
   const [messages, setMessages] = useState([
     {
       sender: "assistant",
-      text: "Namaskaram! 🙏 I am your **SagarDrishti Marine Advisory Assistant** for the Kerala coast.\n\nI provide real-time **Potential Fishing Zones (PFZ)**, **Sea Surface Temperature (SST)** thermal fronts, and **Sea Safety Advisories**.\n\nHow can I help your fishing voyage from Kochi today?",
+      text: "Namaskaram! 🙏 I'm SagarDrishti, your ocean advisor for the Kerala coast — think of me as a second pair of eyes on the sea before you head out.\n\nAsk me where the fish are likely to be today, whether the waves and wind look safe, or what the water temperature's doing out there, and I'll pull together what the satellites and sensors are seeing.\n\nWhere are you headed from Kochi today?",
       timestamp: new Date().toISOString()
     }
   ]);
@@ -21,12 +20,12 @@ export default function App() {
     status: "SAFE",
     wave_height_m: 1.4,
     wind_speed_knots: 11.0,
-    advice: "Normal sea condition off Kochi harbor. Low swell; safe for artisanal & gillnet boats."
+    advice: "Waters are calm off Kochi harbor right now — low swell, so it's a good day for artisanal and gillnet boats."
   });
   const [evidence, setEvidence] = useState({
     sst_range: "28.1 - 28.5 °C",
     chlorophyll: "1.48 mg/m³",
-    reasoning: "Coincident thermal boundary with coastal upwelling plume off Kochi."
+    reasoning: "There's a thermal boundary lining up with a coastal upwelling plume off Kochi — that's usually where the fish gather."
   });
   const [targetLayer, setTargetLayer] = useState({
     id: "pfz",
@@ -35,6 +34,25 @@ export default function App() {
     color: "#00e676"
   });
   const [isMockMode, setIsMockMode] = useState(false);
+
+  // Which of the 4 pages (Chat / Map / Advisories / About) is showing
+  const [activePage, setActivePage] = useState("chat");
+
+  // Theme: read any saved preference, default to light
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "light";
+    return window.localStorage.getItem("ocean-advisor-theme") || "light";
+  });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("ocean-advisor-theme", theme);
+    } catch (e) {
+      // localStorage unavailable (e.g. private browsing) — theme just won't persist
+    }
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const handleSendMessage = async (text) => {
     const userMsg = {
@@ -52,7 +70,6 @@ export default function App() {
         date: "2026-09-11"
       });
 
-      // 1. Show text in chat
       const assistantMsg = {
         sender: "assistant",
         text: response.text || "Received response from ocean advisor.",
@@ -60,12 +77,9 @@ export default function App() {
       };
       setMessages((prev) => [...prev, assistantMsg]);
 
-      // 2. Load first layer from layers onto map (M4 Requirement)
       if (response.layers && response.layers.length > 0) {
         setTargetLayer(response.layers[0]);
       }
-
-      // 3. Update safety and evidence metadata
       if (response.safety) {
         setSafety(response.safety);
       }
@@ -90,52 +104,32 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      {/* Top Navigation Bar */}
-      <header className="app-navbar">
-        <div className="nav-brand">
-          <div className="nav-logo">
-            <Anchor size={22} className="text-cyan" />
-          </div>
-          <div>
-            <h1 className="nav-title">SagarDrishti</h1>
-            <span className="nav-subtitle">Kerala Coastal Ocean Advisory & PFZ Intelligence</span>
-          </div>
-        </div>
+    <div className="app-container" data-theme={theme}>
+      <Navbar
+        activePage={activePage}
+        onNavigate={setActivePage}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
 
-        <div className="nav-status-group">
-          <div className="status-pill">
-            <span className="status-pulse-green"></span>
-            <span>INCOIS Sector 10</span>
-          </div>
-          <div className="status-pill server-pill">
-            <Activity size={14} className={isMockMode ? "text-amber" : "text-emerald"} />
-            <span>{isMockMode ? "Mock Server Active" : "Port 8000 Ready"}</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Split Layout: Left Chat + Cards | Right Leaflet Map */}
-      <main className="app-body">
-        {/* Left Column: Chat & Informational Badges */}
-        <section className="left-panel">
-          <ChatWindow
+      <main className="app-page-body">
+        {activePage === "chat" && (
+          <ChatPage
             messages={messages}
             onSendMessage={handleSendMessage}
             isLoading={isLoading}
             isMockMode={isMockMode}
+            safety={safety}
+            evidence={evidence}
+            targetLayer={targetLayer}
+            theme={theme}
           />
-          <div className="panel-side-cards">
-            <SafetyBadge safety={safety} />
-            <EvidenceCard evidence={evidence} />
-            <MarineWatchPanel />
-          </div>
-        </section>
-
-        {/* Right Column: Interactive Map */}
-        <section className="right-panel">
-          <MapPanel targetLayer={targetLayer} />
-        </section>
+        )}
+        {activePage === "map" && (
+          <MapPage targetLayer={targetLayer} safety={safety} evidence={evidence} />
+        )}
+        {activePage === "advisories" && <AdvisoriesPage />}
+        {activePage === "about" && <AboutPage />}
       </main>
     </div>
   );
