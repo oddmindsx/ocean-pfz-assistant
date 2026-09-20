@@ -1,9 +1,6 @@
 // This is the address of our backend server
-const API_BASE_URL = "http://localhost:8000/api"; 
+const API_BASE_URL = "http://localhost:8000"; 
 
-/**
- * Sends the user's message, current location, and date to the backend
- */
 export async function sendMessage(prompt, context) {
   try {
     const response = await fetch(`${API_BASE_URL}/chat`, {
@@ -13,38 +10,45 @@ export async function sendMessage(prompt, context) {
       },
       body: JSON.stringify({
         message: prompt,
-        location: context?.location || { lat: 9.9312, lon: 76.2673, name: "Kochi" },
-        date: context?.date || new Date().toISOString().split("T")[0],
+        location: context?.location || { name: "Kochi", lat: 9.9312, lon: 76.2673 },
+        date: context?.date || "2026-09-20",
       }),
     });
 
-    // If the server sent back an error, throw it
     if (!response.ok) {
       throw new Error(`Server status error: ${response.status}`);
     }
 
-    // Return the real data from the backend
     const data = await response.json();
-    return data;
+
+    // Transform layers if returned in Pydantic schema format
+    const formattedLayers = (data.layers || []).map((layer, index) => {
+      if (layer.data && layer.data.url) {
+        return layer.data;
+      }
+      return {
+        id: layer.layer_type?.toLowerCase() || `layer-${index}`,
+        name: layer.layer_type || "Ocean Data Layer",
+        url: `/layers/${(layer.layer_type || "pfz").toLowerCase()}/${context?.date || "2026-09-20"}.geojson`,
+        color: layer.layer_type === "SAFETY_CHECK" ? "#ff1744" : "#00e676"
+      };
+    });
+
+    return {
+      text: data.text || "Received ocean advisory.",
+      safety: data.safety || { status: "SAFE", advice: "Conditions clear." },
+      evidence: data.evidence || {},
+      layers: formattedLayers,
+      isMock: false
+    };
 
   } catch (error) {
     console.warn("Could not reach backend server, falling back to mock response:", error);
-    
-    // Safety Fallback: If your backend python server isn't turned on yet, 
-    // it will return this so your website doesn't crash!
     return {
-      text: `[Offline Mode] Received your query: "${prompt}". Please start your backend server at port 5000 for live data!`,
-      safety: {
-        status: "SAFE",
-        wave_height_m: 1.2,
-        wind_speed_knots: 10.0,
-        advice: "Backend server offline. Displaying default sea conditions."
-      },
-      evidence: {
-        sst_range: "28.0 - 28.5 °C",
-        chlorophyll: "1.50 mg/m³",
-        reasoning: "Offline fallback mode active."
-      },
+      text: `[Offline Mode] Query: "${prompt}". Server issue or connection dropped.`,
+      safety: { status: "SAFE", advice: "Displaying fallback parameters." },
+      evidence: {},
+      layers: [],
       isMock: true
     };
   }
