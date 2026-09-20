@@ -54,18 +54,18 @@ export async function sendMessage(prompt, context) {
   }
 }
 
-export async function fetchLayerGeoJson(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to load layer data: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.warn("Could not fetch layer GeoJSON, returning empty collection:", error);
-    return {
-      type: "FeatureCollection",
-      features: []
-    };
-  }
+export async function sendChatMessage(message, location = null) {
+  const response = await fetch("http://localhost:8000/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: message,
+      user_id: "default_user",
+      location: location // <-- If null, backend falls back; if object, backend uses device GPS
+    }),
+  });
+
+  return await response.json();
 }
