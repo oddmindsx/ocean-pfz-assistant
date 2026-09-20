@@ -1705,3 +1705,36 @@ body {
   color: var(--text-secondary);
   line-height: 1.55;
 }
+/* User GPS Marker Styling */
+.custom-user-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.user-marker-pin {
+  font-size: 24px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: pulse-pin 2s infinite ease-in-out;
+}
+
+.user-marker-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  margin-top: -2px;
+}
+
+@keyframes pulse-pin {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
