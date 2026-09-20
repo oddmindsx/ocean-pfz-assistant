@@ -47,19 +47,46 @@ def fetch_pfz_advisory(lat: float, lon: float, date: str) -> Optional[dict]:
     """Real integration point for INCOIS PFZ advisory data — not called yet."""
     return None
 
+# Response templates localized by language code or script
+PFZ_RESPONSES = {
+    "hi": "यहाँ {location} के लिए आज {date} का संभावित मत्स्य क्षेत्र (PFZ) परामर्श है। आपके तट के पास उच्च क्लोरोफिल और अनुकूल समुद्री तापमान देखा गया है।",
+    "ta": "இன்று {date} -ல் {location} பகுதிாக்கான சாத்தியமான மீன்பிடி மண்டல (PFZ) தகவல் இதோ. உங்கள் கடலோரப் பகுதியில் அதிகமான குளோரோஃபில் மற்றும் சாதகமான வெப்பநிலை கண்டறியப்பட்டுள்ளது.",
+    "ml": "இന്ന് {date} -ൽ {location} തീരത്തിനായുള്ള സാധ്യതയുള്ള മത്സ്യബന്ധന മേഖല (PFZ) വിവരങ്ങൾ ഇതാ. നിങ്ങളുടെ കടൽത്തീരത്ത് ഉയർന്ന ക്ലോറോഫിൽ അടയാളപ്പെടുത്തിയിട്ടുണ്ട്.",
+    "en": "Here's the Potential Fishing Zone advisory for {location} on {date}. High chlorophyll concentrations and favorable thermal boundaries have been detected off your coast."
+}
+
+SAFETY_RESPONSES = {
+    "hi": "{location} के लिए {date} का सुरक्षा परामर्श: समुद्र में मध्यम स्थितियां हैं। तट से दूर हल्की लहरें दर्ज की गई हैं।",
+    "ta": "{location} பகுதிக்கு {date} தேதிக்கான பாதுகாப்பு எச்சரிக்கை: கடல் மிதமான நிலையில் உள்ளது.",
+    "ml": "{location} തീരത്തിന് {date} തീയതിയിലെ സുരക്ഷാ മുന്നറിയിപ്പ്: കടലിൽ സാധാരണ നിലയിലുള്ള തിരമാലകൾ രേഖപ്പെടുത്തിയിട്ടുണ്ട്.",
+    "en": "Safety advisory for {location} on {date}: Moderate sea conditions reported. Low swell off the coast."
+}
+
+
 def run_planner(context: ChatContext) -> dict:
     weather = fetch_marine_weather(context.location.lat, context.location.lon)
     pfz = fetch_pfz_advisory(context.location.lat, context.location.lon, context.date)
     is_live = weather is not None or pfz is not None
 
     raw_msg = (context.raw_message or "").lower()
+    
+    # Read language directly from ChatContext
+    lang = getattr(context, "language", "en")
+
+    # Resolve location label dynamically
+    # Avoids hardcoding "Current Location" or default "Kochi" when GPS coordinates are active
+    if context.location_source == "device_gps" or context.location.name == "Current Location":
+        location_display = "your current coastal area"
+    elif context.location.name == "Kochi" and context.location_source == "default_fallback":
+        location_display = "your coastal area"
+    else:
+        location_display = context.location.name
 
     # Match explicit PFZ intent or fallback keyword check
-    if context.intent == "PFZ_QUERY" or "fish" in raw_msg:
-        text = (
-            f"Here's the Potential Fishing Zone advisory for {context.location.name} on {context.date}. "
-            f"High chlorophyll concentrations and favorable thermal boundaries have been detected off your coast."
-        )
+    if context.intent == "PFZ_QUERY" or any(w in raw_msg for w in ["fish", "machli", "meen"]):
+        template = PFZ_RESPONSES.get(lang, PFZ_RESPONSES["en"])
+        text = template.format(location=location_display, date=context.date)
+        
         layers = [
             MapLayer(
                 layer_type="PFZ",
@@ -72,11 +99,11 @@ def run_planner(context: ChatContext) -> dict:
                 }
             )
         ]
-    elif context.intent == "SAFETY_CHECK" or any(w in raw_msg for w in ["safe", "wave", "wind", "weather"]):
-        text = (
-            f"Safety advisory for {context.location.name} on {context.date}: "
-            f"Moderate sea conditions reported. Low swell off the coast."
-        )
+
+    elif context.intent == "SAFETY_CHECK" or any(w in raw_msg for w in ["safe", "wave", "wind", "weather", "toofan", "kadal"]):
+        template = SAFETY_RESPONSES.get(lang, SAFETY_RESPONSES["en"])
+        text = template.format(location=location_display, date=context.date)
+        
         layers = [
             MapLayer(
                 layer_type="ALERT_ZONE",
@@ -91,10 +118,9 @@ def run_planner(context: ChatContext) -> dict:
         ]
     else:
         text = (
-            f"Got your message. I understood location={context.location.name} "
+            f"Got your message. I understood location={location_display} "
             f"(resolved via {context.location_source}), date={context.date}, but "
-            f"don't have a specific handler for this intent yet "
-            f"(confidence in that read: {context.intent_confidence})."
+            f"don't have a specific handler for this intent yet."
         )
         layers = []
 
@@ -108,7 +134,7 @@ def run_planner(context: ChatContext) -> dict:
         "evidence": [
             EvidenceItem(
                 source="stub",
-                summary=f"Analyzed satellite data for {context.location.name}.",
+                summary=f"Analyzed satellite data for {location_display}.",
                 is_live=is_live,
             )
         ],
