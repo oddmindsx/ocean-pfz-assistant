@@ -29,6 +29,45 @@ export default function MapPanel({ targetLayer, userLocation }) {
       ? [userLocation.lat, userLocation.lon]
       : DEFAULT_COORDS;
 
+  // -------------------------------------------------------------
+  // HELPER: Defined BEFORE loadOrUpdateLayer to prevent ReferenceError
+  // -------------------------------------------------------------
+  const getLayerStyle = (layerId, feature) => {
+    if (layerId === "pfz") {
+      return {
+        color: "#00c853",
+        weight: 2,
+        fillColor: "#00e676",
+        fillOpacity: 0.35,
+        dashArray: "6, 3",
+      };
+    }
+    if (layerId === "sst") {
+      const temp = feature?.properties?.temp_c || 28.5;
+      const color = temp > 28.8 ? "#ff5722" : temp > 28.3 ? "#ff9800" : "#03a9f4";
+      return {
+        color: color,
+        weight: 2,
+        fillColor: color,
+        fillOpacity: 0.28,
+      };
+    }
+    if (layerId === "chlorophyll") {
+      return {
+        color: "#00897b",
+        weight: 2,
+        fillColor: "#26a69a",
+        fillOpacity: 0.4,
+      };
+    }
+    return {
+      color: "#3b82f6",
+      weight: 2,
+      fillColor: "#60a5fa",
+      fillOpacity: 0.3,
+    };
+  };
+
   // 1. Initialize Map on Mount
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
@@ -111,18 +150,16 @@ export default function MapPanel({ targetLayer, userLocation }) {
     }
   }, [userLocation]);
 
-  // 3. React to Incoming targetLayer from Chat Response
-  useEffect(() => {
-    if (!targetLayer || !mapInstanceRef.current) return;
-    loadOrUpdateLayer(targetLayer);
-  }, [targetLayer]);
-
+  // 3. Layer Management Function
   const loadOrUpdateLayer = async (layerMeta) => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
-    const layerId = layerMeta.id;
+    // Handle both string layer IDs and object metadata
+    const layerId = typeof layerMeta === "string" ? layerMeta : layerMeta.id;
+    const layerColor = typeof layerMeta === "object" && layerMeta.color ? layerMeta.color : "#00e676";
 
+    // If layer already exists in Leaflet instance
     if (layerObjectsRef.current[layerId]) {
       const existing = layerObjectsRef.current[layerId];
       if (!map.hasLayer(existing)) {
@@ -139,7 +176,29 @@ export default function MapPanel({ targetLayer, userLocation }) {
     }
 
     try {
-      const geoJsonData = await fetchLayerGeoJson(layerId);
+      let geoJsonData;
+
+      // 1. Try fetching via provided URL if available in layerMeta
+      if (layerMeta && typeof layerMeta === "object" && layerMeta.url) {
+        const res = await fetch(layerMeta.url);
+        if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${layerMeta.url}`);
+        geoJsonData = await res.json();
+      } else {
+        // 2. Fall back to fetchLayerGeoJson service call
+        const fetched = await fetchLayerGeoJson(layerId);
+        // If the API service returned a URL string instead of JSON object, fetch it
+        if (typeof fetched === "string") {
+          const res = await fetch(fetched);
+          geoJsonData = await res.json();
+        } else {
+          geoJsonData = fetched;
+        }
+      }
+
+      if (!geoJsonData || (!geoJsonData.features && !Array.isArray(geoJsonData))) {
+        console.warn(`Layer ${layerId} received invalid GeoJSON:`, geoJsonData);
+        return;
+      }
 
       const leafletGeoLayer = L.geoJSON(geoJsonData, {
         style: (feature) => getLayerStyle(layerId, feature),
@@ -161,18 +220,16 @@ export default function MapPanel({ targetLayer, userLocation }) {
           const props = feature.properties || {};
           const popupHtml = `
             <div class="pfz-popup-container">
-              <div class="popup-badge" style="background:${layerMeta.color || "#00e676"};">
+              <div class="popup-badge" style="background:${layerColor}; padding:2px 6px; color:#fff; font-weight:bold; font-size:10px; border-radius:3px;">
                 ${layerId.toUpperCase()} FEATURE
               </div>
-              <h4 class="popup-title">${props.zone_name || props.name || props.label || "Ocean Zone"}</h4>
-              <div class="popup-specs">
+              <h4 class="popup-title" style="margin:6px 0 4px 0; font-size:14px;">${props.zone_name || props.name || "Ocean Feature"}</h4>
+              <div class="popup-specs" style="font-size:12px; color:#334155;">
                 ${props.distance_km ? `<div><strong>Distance:</strong> ${props.distance_km} km</div>` : ""}
                 ${props.direction ? `<div><strong>Bearing:</strong> ${props.direction}</div>` : ""}
                 ${props.depth_range ? `<div><strong>Depth:</strong> ${props.depth_range}</div>` : ""}
                 ${props.sst_celsius ? `<div><strong>SST:</strong> ${props.sst_celsius} °C</div>` : ""}
                 ${props.chlorophyll_mg_m3 ? `<div><strong>Chl-a:</strong> ${props.chlorophyll_mg_m3} mg/m³</div>` : ""}
-                ${props.fish_types ? `<div><strong>Target Species:</strong> ${props.fish_types.join(", ")}</div>` : ""}
-                ${props.confidence ? `<div><strong>Confidence:</strong> ${props.confidence}</div>` : ""}
               </div>
             </div>
           `;
@@ -182,6 +239,7 @@ export default function MapPanel({ targetLayer, userLocation }) {
 
       layerObjectsRef.current[layerId] = leafletGeoLayer;
 
+      // Fit map bounds to show layer features
       try {
         const bounds = leafletGeoLayer.getBounds();
         if (bounds.isValid()) {
@@ -190,52 +248,23 @@ export default function MapPanel({ targetLayer, userLocation }) {
       } catch (e) {}
 
       setActiveLayers((prev) => {
+        const metaObj = typeof layerMeta === "object" ? layerMeta : { id: layerId, name: layerId.toUpperCase() };
         const exists = prev.some((l) => l.id === layerId);
         if (exists) {
           return prev.map((l) => (l.id === layerId ? { ...l, visible: true } : l));
         }
-        return [...prev, { ...layerMeta, visible: true }];
+        return [...prev, { ...metaObj, visible: true }];
       });
     } catch (err) {
       console.error(`Failed loading layer ${layerId}:`, err);
     }
   };
 
-  const getLayerStyle = (layerId, feature) => {
-    if (layerId === "pfz") {
-      return {
-        color: "#00c853",
-        weight: 2,
-        fillColor: "#00e676",
-        fillOpacity: 0.35,
-        dashArray: "6, 3",
-      };
-    }
-    if (layerId === "sst") {
-      const temp = feature?.properties?.temp_c || 28.5;
-      const color = temp > 28.8 ? "#ff5722" : temp > 28.3 ? "#ff9800" : "#03a9f4";
-      return {
-        color: color,
-        weight: 2,
-        fillColor: color,
-        fillOpacity: 0.28,
-      };
-    }
-    if (layerId === "chlorophyll") {
-      return {
-        color: "#00897b",
-        weight: 2,
-        fillColor: "#26a69a",
-        fillOpacity: 0.4,
-      };
-    }
-    return {
-      color: "#3b82f6",
-      weight: 2,
-      fillColor: "#60a5fa",
-      fillOpacity: 0.3,
-    };
-  };
+  // 4. React to Incoming targetLayer from Chat Response
+  useEffect(() => {
+    if (!targetLayer || !mapInstanceRef.current) return;
+    loadOrUpdateLayer(targetLayer);
+  }, [targetLayer]);
 
   const handleToggleLayer = (layerId) => {
     const map = mapInstanceRef.current;
