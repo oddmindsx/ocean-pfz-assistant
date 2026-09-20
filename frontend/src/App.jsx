@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import './App.css';
 import Navbar from "./components/Navbar";
 import ChatPage from "./components/ChatPage";
 import MapPage from "./components/MapPage";
@@ -7,10 +8,20 @@ import AboutPage from "./components/AboutPage";
 import { sendMessage } from "./services/api";
 
 export default function App() {
+  // 1. DYNAMIC LOCATION STATE (Defaults to Kochi if user denies browser location)
+  const [userLocation, setUserLocation] = useState({
+    name: "Kochi (Default)",
+    lat: 9.9312,
+    lon: 76.2673
+  });
+
+  // Get current date dynamically in YYYY-MM-DD format
+  const todayDate = new Date().toISOString().split("T")[0];
+
   const [messages, setMessages] = useState([
     {
       sender: "assistant",
-      text: "Namaskaram! 🙏 I'm SagarDrishti, your ocean advisor for the Kerala coast — think of me as a second pair of eyes on the sea before you head out.\n\nAsk me where the fish are likely to be today, whether the waves and wind look safe, or what the water temperature's doing out there, and I'll pull together what the satellites and sensors are seeing.\n\nWhere are you headed from Kochi today?",
+      text: "Namaskaram! 🙏 I'm SagarDrishti, your ocean advisor — think of me as a second pair of eyes on the sea before you head out.\n\nAsk me where the fish are likely to be today, whether the waves and wind look safe, or what the water temperature's doing out there, and I'll pull together what the satellites and sensors are seeing.\n\nWhere are you heading out from today?",
       timestamp: new Date().toISOString()
     }
   ]);
@@ -20,40 +31,60 @@ export default function App() {
     status: "SAFE",
     wave_height_m: 1.4,
     wind_speed_knots: 11.0,
-    advice: "Waters are calm off Kochi harbor right now — low swell, so it's a good day for artisanal and gillnet boats."
+    advice: "Detecting local ocean conditions... low swell reported in your area."
   });
   const [evidence, setEvidence] = useState({
     sst_range: "28.1 - 28.5 °C",
     chlorophyll: "1.48 mg/m³",
-    reasoning: "There's a thermal boundary lining up with a coastal upwelling plume off Kochi — that's usually where the fish gather."
+    reasoning: "Analyzing satellite thermal and chlorophyll ocean data for your coordinates."
   });
   const [targetLayer, setTargetLayer] = useState({
     id: "pfz",
     name: "Potential Fishing Zones (PFZ)",
-    url: "/data/pfz_kochi_2026-09-11.geojson",
+    url: `/data/pfz_kochi_${todayDate}.geojson`,
     color: "#00e676"
   });
   const [isMockMode, setIsMockMode] = useState(false);
 
-  // Which of the 4 pages (Chat / Map / Advisories / About) is showing
+  // Pages & Theme setup
   const [activePage, setActivePage] = useState("chat");
-
-  // Theme: read any saved preference, default to light
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "light";
     return window.localStorage.getItem("ocean-advisor-theme") || "light";
   });
 
+  // 2. AUTO-DETECT BROWSER LOCATION ON MOUNT
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = parseFloat(position.coords.latitude.toFixed(4));
+          const lon = parseFloat(position.coords.longitude.toFixed(4));
+          setUserLocation({
+            name: "Current Location",
+            lat: lat,
+            lon: lon
+          });
+          console.log(`Updated location to user coordinates: ${lat}, ${lon}`);
+        },
+        (error) => {
+          console.warn("Location permission denied or unavailable, using fallback:", error.message);
+        }
+      );
+    }
+  }, []);
+
   useEffect(() => {
     try {
       window.localStorage.setItem("ocean-advisor-theme", theme);
     } catch (e) {
-      // localStorage unavailable (e.g. private browsing) — theme just won't persist
+      // localStorage unavailable
     }
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
+  // 3. SEND MESSAGE WITH REAL-TIME COORDINATES & DATE
   const handleSendMessage = async (text) => {
     const userMsg = {
       sender: "user",
@@ -65,9 +96,10 @@ export default function App() {
     setIsLoading(true);
 
     try {
+      // Passes dynamic location and today's date to your API backend
       const response = await sendMessage(text, {
-        location: { name: "Kochi", lat: 9.9312, lon: 76.2673 },
-        date: "2026-09-11"
+        location: userLocation,
+        date: todayDate
       });
 
       const assistantMsg = {
@@ -123,12 +155,18 @@ export default function App() {
             evidence={evidence}
             targetLayer={targetLayer}
             theme={theme}
+            userLocation={userLocation}
           />
         )}
         {activePage === "map" && (
-          <MapPage targetLayer={targetLayer} safety={safety} evidence={evidence} />
+          <MapPage 
+            targetLayer={targetLayer} 
+            safety={safety} 
+            evidence={evidence} 
+            userLocation={userLocation}
+          />
         )}
-        {activePage === "advisories" && <AdvisoriesPage />}
+        {activePage === "advisories" && <AdvisoriesPage userLocation={userLocation} />}
         {activePage === "about" && <AboutPage />}
       </main>
     </div>
