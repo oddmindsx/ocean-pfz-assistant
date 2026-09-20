@@ -86,54 +86,54 @@ export default function App() {
 
   // 3. SEND MESSAGE WITH REAL-TIME COORDINATES & DATE
   const handleSendMessage = async (text) => {
-    const userMsg = {
-      sender: "user",
-      text,
+  const userMsg = {
+    sender: "user",
+    text,
+    timestamp: new Date().toISOString()
+  };
+
+  setMessages((prev) => [...prev, userMsg]);
+  setIsLoading(true);
+
+  try {
+    const response = await sendMessage(text, {
+      location: userLocation,
+      date: todayDate
+    });
+
+    const assistantMsg = {
+      sender: "assistant",
+      text: response.text || "Received response from ocean advisor.",
       timestamp: new Date().toISOString()
     };
+    setMessages((prev) => [...prev, assistantMsg]);
 
-    setMessages((prev) => [...prev, userMsg]);
-    setIsLoading(true);
-
-    try {
-      // Passes dynamic location and today's date to your API backend
-      const response = await sendMessage(text, {
-        location: userLocation,
-        date: todayDate
-      });
-
-      const assistantMsg = {
-        sender: "assistant",
-        text: response.text || "Received response from ocean advisor.",
-        timestamp: new Date().toISOString()
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-
-      if (response.layers && response.layers.length > 0) {
-        setTargetLayer(response.layers[0]);
-      }
-      if (response.safety) {
-        setSafety(response.safety);
-      }
-      if (response.evidence) {
-        setEvidence(response.evidence);
-      }
-
-      setIsMockMode(!!response.isMock);
-    } catch (err) {
-      console.error("Chat error:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "assistant",
-          text: `⚠️ Error retrieving ocean state: ${err.message}`,
-          timestamp: new Date().toISOString()
-        }
-      ]);
-    } finally {
-      setIsLoading(false);
+    // Safely update layer only if valid layer exists
+    if (response.layers && response.layers.length > 0 && response.layers[0]) {
+      setTargetLayer(response.layers[0]);
     }
-  };
+    if (response.safety) {
+      setSafety(response.safety);
+    }
+    if (response.evidence) {
+      setEvidence(response.evidence);
+    }
+
+    setIsMockMode(!!response.isMock);
+  } catch (err) {
+    console.error("Chat error:", err);
+    setMessages((prev) => [
+      ...prev,
+      {
+        sender: "assistant",
+        text: `⚠️ Error retrieving ocean state: ${err.message}`,
+        timestamp: new Date().toISOString()
+      }
+    ]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="app-container" data-theme={theme}>
