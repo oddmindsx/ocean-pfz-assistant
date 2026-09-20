@@ -1,5 +1,5 @@
 // This is the address of our backend server
-const API_BASE_URL = "http://localhost:5000/api"; 
+const API_BASE_URL = "http://localhost:8000/api"; 
 
 /**
  * Sends the user's message, current location, and date to the backend
