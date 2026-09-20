@@ -104,8 +104,8 @@ def detect_language(text: str) -> str:
 # have a native speaker on the team check these before the demo.
 INTENT_KEYWORDS = {
     "PFZ_QUERY": {
-        "en": ["pfz", "potential fishing zone", "fishing zone", "where to fish",
-               "chlorophyll", "fish availability", "nearest fishing", "fish stock"],
+        "en": ["pfz", "potential fishing zone", "fishing zone", "where to fish","Where do I go fishing today ?"
+               "chlorophyll", "fish availability", "nearest fishing", "fish stock", "help", "weather today"],
         "hi": ["मछली पकड़ने का क्षेत्र", "मछली", "मत्स्य क्षेत्र"],
         "mr": ["मासेमारी क्षेत्र", "मासे", "मत्स्य क्षेत्र"],
         "ta": ["மீன்பிடி பகுதி", "மீன்"],
