@@ -12,58 +12,49 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-const KOCHI_COORDS = [9.9312, 76.2673];
+const DEFAULT_COORDS = [9.9312, 76.2673]; // Kochi fallback
 
-export default function MapPanel({ targetLayer }) {
+export default function MapPanel({ targetLayer, userLocation }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const userMarkerRef = useRef(null);
   const layerObjectsRef = useRef({}); // map: layerId -> L.GeoJSON
-  
+
   const [activeLayers, setActiveLayers] = useState([]);
   const [selectedZoneInfo, setSelectedZoneInfo] = useState(null);
+
+  // Determine active initial coordinates
+  const currentCoords =
+    userLocation?.lat && userLocation?.lon
+      ? [userLocation.lat, userLocation.lon]
+      : DEFAULT_COORDS;
 
   // 1. Initialize Map on Mount
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: KOCHI_COORDS,
+      center: currentCoords,
       zoom: 9,
       minZoom: 6,
       maxZoom: 16,
-      zoomControl: false
+      zoomControl: false,
     });
 
     // Clean, modern CartoDB Voyager tiles
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> | Data: INCOIS / OCM-3',
+        attribution:
+          '&copy; <a href="https://carto.com/">CARTO</a> | Data: INCOIS / OCM-3',
         subdomains: "abcd",
-        maxZoom: 19
+        maxZoom: 19,
       }
     ).addTo(map);
 
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    // Harbor Pin for Kochi
-    const harborIcon = L.divIcon({
-      className: "custom-harbor-marker",
-      html: `<div class="harbor-marker-pin">⚓</div><div class="harbor-marker-label">Kochi Port</div>`,
-      iconSize: [60, 40],
-      iconAnchor: [30, 20]
-    });
-
-    const marker = L.marker(KOCHI_COORDS, { icon: harborIcon }).addTo(map);
-    marker.bindPopup(`
-      <div style="font-family: 'Plus Jakarta Sans', sans-serif;">
-        <h4 style="margin:0 0 4px 0; color:#0f172a; font-size:14px;">⚓ Kochi Harbor Base</h4>
-        <p style="margin:0; font-size:12px; color:#475569;">Central Command / Fishery Landing Center</p>
-        <div style="margin-top:6px; font-size:11px; color:#0284c7; font-weight:600;">Lat: 9.9312°N, Lon: 76.2673°E</div>
-      </div>
-    `);
-
-    // Load Kerala Coastline base layer
+    // Load Coastline base layer
     fetch("/data/kerala_coastline.geojson")
       .then((res) => res.json())
       .then((coastData) => {
@@ -72,10 +63,10 @@ export default function MapPanel({ targetLayer }) {
             color: "#0284c7",
             weight: 3,
             opacity: 0.85,
-            dashArray: "4, 4"
-          }
+            dashArray: "4, 4",
+          },
         }).addTo(map);
-        coastlineLayer.bindTooltip("Kerala Coastline Margin", { sticky: true });
+        coastlineLayer.bindTooltip("Coastline Margin", { sticky: true });
       })
       .catch((err) => console.warn("Coastline load notice:", err));
 
@@ -87,7 +78,40 @@ export default function MapPanel({ targetLayer }) {
     };
   }, []);
 
-  // 2. React to Incoming targetLayer from Chat Response (M4 Requirement)
+  // 2. React to dynamic userLocation changes (GPS update)
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !userLocation?.lat || !userLocation?.lon) return;
+
+    const latLng = [userLocation.lat, userLocation.lon];
+
+    // Smoothly re-center map to user GPS coordinates
+    map.flyTo(latLng, 10, { duration: 1.5 });
+
+    // Update or create user location marker
+    if (userMarkerRef.current) {
+      userMarkerRef.current.setLatLng(latLng);
+    } else {
+      const locationIcon = L.divIcon({
+        className: "custom-user-marker",
+        html: `<div class="user-marker-pin" style="font-size:22px;">📍</div><div class="user-marker-label" style="font-weight:600; font-size:12px; background:white; padding:2px 6px; border-radius:4px; box-shadow:0 1px 4px rgba(0,0,0,0.2);">Your Position</div>`,
+        iconSize: [80, 40],
+        iconAnchor: [40, 20],
+      });
+
+      userMarkerRef.current = L.marker(latLng, { icon: locationIcon }).addTo(map);
+      userMarkerRef.current.bindPopup(`
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif;">
+          <h4 style="margin:0 0 4px 0; color:#0f172a; font-size:14px;">📍 Current GPS Location</h4>
+          <div style="margin-top:6px; font-size:11px; color:#0284c7; font-weight:600;">
+            Lat: ${userLocation.lat.toFixed(4)}°N, Lon: ${userLocation.lon.toFixed(4)}°E
+          </div>
+        </div>
+      `);
+    }
+  }, [userLocation]);
+
+  // 3. React to Incoming targetLayer from Chat Response
   useEffect(() => {
     if (!targetLayer || !mapInstanceRef.current) return;
     loadOrUpdateLayer(targetLayer);
@@ -99,7 +123,6 @@ export default function MapPanel({ targetLayer }) {
 
     const layerId = layerMeta.id;
 
-    // If layer already exists in Leaflet, ensure it's visible and fit bounds
     if (layerObjectsRef.current[layerId]) {
       const existing = layerObjectsRef.current[layerId];
       if (!map.hasLayer(existing)) {
@@ -132,10 +155,9 @@ export default function MapPanel({ targetLayer }) {
             click: (e) => {
               setSelectedZoneInfo(feature.properties);
               L.DomEvent.stopPropagation(e);
-            }
+            },
           });
 
-          // Bind rich popup
           const props = feature.properties || {};
           const popupHtml = `
             <div class="pfz-popup-container">
@@ -155,13 +177,11 @@ export default function MapPanel({ targetLayer }) {
             </div>
           `;
           layer.bindPopup(popupHtml, { maxWidth: 280 });
-        }
+        },
       }).addTo(map);
 
-      // Store reference
       layerObjectsRef.current[layerId] = leafletGeoLayer;
 
-      // Fit map bounds to newly loaded layer
       try {
         const bounds = leafletGeoLayer.getBounds();
         if (bounds.isValid()) {
@@ -169,7 +189,6 @@ export default function MapPanel({ targetLayer }) {
         }
       } catch (e) {}
 
-      // Update state
       setActiveLayers((prev) => {
         const exists = prev.some((l) => l.id === layerId);
         if (exists) {
@@ -189,7 +208,7 @@ export default function MapPanel({ targetLayer }) {
         weight: 2,
         fillColor: "#00e676",
         fillOpacity: 0.35,
-        dashArray: "6, 3"
+        dashArray: "6, 3",
       };
     }
     if (layerId === "sst") {
@@ -199,7 +218,7 @@ export default function MapPanel({ targetLayer }) {
         color: color,
         weight: 2,
         fillColor: color,
-        fillOpacity: 0.28
+        fillOpacity: 0.28,
       };
     }
     if (layerId === "chlorophyll") {
@@ -207,18 +226,17 @@ export default function MapPanel({ targetLayer }) {
         color: "#00897b",
         weight: 2,
         fillColor: "#26a69a",
-        fillOpacity: 0.4
+        fillOpacity: 0.4,
       };
     }
     return {
       color: "#3b82f6",
       weight: 2,
       fillColor: "#60a5fa",
-      fillOpacity: 0.3
+      fillOpacity: 0.3,
     };
   };
 
-  // Toggle layer visibility
   const handleToggleLayer = (layerId) => {
     const map = mapInstanceRef.current;
     const geoLayer = layerObjectsRef.current[layerId];
@@ -237,7 +255,6 @@ export default function MapPanel({ targetLayer }) {
     }
   };
 
-  // Remove layer completely
   const handleRemoveLayer = (layerId) => {
     const map = mapInstanceRef.current;
     const geoLayer = layerObjectsRef.current[layerId];
@@ -248,12 +265,10 @@ export default function MapPanel({ targetLayer }) {
     setActiveLayers((prev) => prev.filter((l) => l.id !== layerId));
   };
 
-  // Add available layer manually
   const handleAddLayer = (layerMeta) => {
     loadOrUpdateLayer(layerMeta);
   };
 
-  // Fit bounds to active layers
   const handleFitBounds = () => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -268,15 +283,14 @@ export default function MapPanel({ targetLayer }) {
     if (group.getLayers().length > 0) {
       map.fitBounds(group.getBounds(), { padding: [40, 40] });
     } else {
-      map.setView(KOCHI_COORDS, 9);
+      map.setView(currentCoords, 9);
     }
   };
 
-  // All catalog layers available to toggle
   const allLayersCatalog = [
     { id: "pfz", name: "Potential Fishing Zones", color: "#00e676" },
     { id: "sst", name: "SST Thermal Contours", color: "#ff7043" },
-    { id: "chlorophyll", name: "Chlorophyll-a Plumes", color: "#26a69a" }
+    { id: "chlorophyll", name: "Chlorophyll-a Plumes", color: "#26a69a" },
   ];
 
   const availableToAdd = allLayersCatalog.filter(
@@ -285,10 +299,8 @@ export default function MapPanel({ targetLayer }) {
 
   return (
     <div className="map-panel-wrapper">
-      {/* Map Canvas */}
       <div ref={mapContainerRef} className="leaflet-map-container" />
 
-      {/* Floating Dynamic Layer Controls */}
       <div className="map-floating-controls">
         <LayerControls
           activeLayers={activeLayers}
@@ -300,7 +312,6 @@ export default function MapPanel({ targetLayer }) {
         />
       </div>
 
-      {/* Selected Feature Card */}
       {selectedZoneInfo && (
         <div className="zone-detail-overlay">
           <div className="zone-detail-header">
@@ -339,12 +350,11 @@ export default function MapPanel({ targetLayer }) {
         </div>
       )}
 
-      {/* Map Legend */}
       <div className="map-legend">
         <div className="legend-title">Legend</div>
         <div className="legend-item">
           <span className="legend-line coastline-line"></span>
-          <span>Kerala Coastline</span>
+          <span>Coastline Margin</span>
         </div>
         <div className="legend-item">
           <span className="legend-box pfz-box"></span>
