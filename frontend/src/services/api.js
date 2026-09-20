@@ -69,3 +69,17 @@ export async function sendChatMessage(message, location = null) {
 
   return await response.json();
 }
+
+export async function fetchLayerGeoJson(url) {
+  try {
+    const fullUrl = url.startsWith("http") ? url : `http://localhost:8000${url}`;
+    const response = await fetch(fullUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch GeoJSON: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching GeoJSON layer:", error);
+    return null;
+  }
+}
