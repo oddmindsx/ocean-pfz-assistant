@@ -34,10 +34,13 @@ export async function sendMessage(prompt, context) {
       };
     });
 
+    // Backend sends evidence as a List[EvidenceItem] (source/summary/value/is_live),
+    // not an object — pass it through as-is instead of coercing to {}, which
+    // previously caused EvidenceCard to always show its hardcoded placeholders.
     return {
       text: data.text || "Received ocean advisory.",
-      safety: data.safety || { status: "SAFE", advice: "Conditions clear." },
-      evidence: data.evidence || {},
+      safety: data.safety || { status: "SAFE", reason: "Conditions clear." },
+      evidence: data.evidence || [],
       layers: formattedLayers,
       isMock: false
     };
@@ -46,8 +49,8 @@ export async function sendMessage(prompt, context) {
     console.warn("Could not reach backend server, falling back to mock response:", error);
     return {
       text: `[Offline Mode] Query: "${prompt}". Server issue or connection dropped.`,
-      safety: { status: "SAFE", advice: "Displaying fallback parameters." },
-      evidence: {},
+      safety: { status: "SAFE", reason: "Displaying fallback parameters." },
+      evidence: [],
       layers: [],
       isMock: true
     };
