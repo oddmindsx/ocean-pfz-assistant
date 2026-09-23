@@ -180,9 +180,11 @@ export default function MapPanel({ targetLayer, userLocation }) {
 
       // 1. Try fetching via provided URL if available in layerMeta
       if (layerMeta && typeof layerMeta === "object" && layerMeta.url) {
-        const res = await fetch(layerMeta.url);
-        if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${layerMeta.url}`);
-        geoJsonData = await res.json();
+        // layerMeta.url is a relative path from the backend (e.g. "/layers/pfz/<date>.geojson").
+        // Vite's dev server has no proxy to the FastAPI backend, so a bare
+        // fetch() here would 404 against Vite itself. Route through
+        // fetchLayerGeoJson, which resolves the backend host correctly.
+        geoJsonData = await fetchLayerGeoJson(layerMeta.url);
       } else {
         // 2. Fall back to fetchLayerGeoJson service call
         const fetched = await fetchLayerGeoJson(layerId);
