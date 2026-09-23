@@ -20,7 +20,7 @@ export default function RecommendationPanel({ safety, evidence }) {
     {
       icon: Wind,
       title: "Weather",
-      body: safety?.advice || "Stable winds and pressure — a good window to head out.",
+      body: safety?.reason || "Stable winds and pressure — a good window to head out.",
       tag: "Source: IMD",
       tagClass: "tag-amber"
     },
