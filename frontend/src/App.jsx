@@ -29,15 +29,17 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [safety, setSafety] = useState({
     status: "SAFE",
-    wave_height_m: 1.4,
-    wind_speed_knots: 11.0,
-    advice: "Detecting local ocean conditions... low swell reported in your area."
+    wave_height_m: null,
+    wind_speed_knots: null,
+    reason: "Detecting local ocean conditions... low swell reported in your area."
   });
-  const [evidence, setEvidence] = useState({
-    sst_range: "28.1 - 28.5 °C",
-    chlorophyll: "1.48 mg/m³",
-    reasoning: "Analyzing satellite thermal and chlorophyll ocean data for your coordinates."
-  });
+  const [evidence, setEvidence] = useState([
+    {
+      source: "stub",
+      summary: "Analyzing satellite thermal and chlorophyll ocean data for your coordinates.",
+      is_live: false
+    }
+  ]);
   const [targetLayer, setTargetLayer] = useState({
     id: "pfz",
     name: "Potential Fishing Zones (PFZ)",

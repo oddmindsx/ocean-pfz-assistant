@@ -1280,6 +1280,68 @@ body {
   line-height: 1.45;
 }
 
+.evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.evidence-item {
+  background: var(--bg-tertiary);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.evidence-item-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.evidence-badge-live {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.evidence-badge-static {
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--text-muted);
+}
+
+.evidence-source {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.evidence-summary {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.evidence-value {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
 
 /* ============================================================
    MARINE WATCH

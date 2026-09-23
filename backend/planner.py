@@ -1,35 +1,51 @@
 """
-Planner (M1 placeholder — stands in for M2/M3's real multi-agent pipeline:
-weather intelligence agent, ocean analytics agent, risk assessment agent).
+Planner — wires real data into the M1 pipeline (weather + PFZ advisory),
+falling back to synthetic stub text whenever a live source is unavailable.
 
-READ BEFORE DEMO DAY:
-Every value produced here is synthetic. `is_live=False` is set on every
-piece of evidence and on the safety status for exactly this reason — so
-the frontend/judges never mistake stub output for a real advisory. A stub
-function cannot become "not fabricated" by writing better code around it;
-that requires the real data agents (M2/M3) to exist and be wired in. Don't
-strip the is_live flag off without actually connecting a real source first.
+is_live IS ONLY TRUE WHEN DATA ACTUALLY CAME FROM A LIVE FETCH THIS RUN OR
+FROM A CACHED COPY OF ONE — never for the bundled static PFZ snapshot, and
+never for the synthetic stub. This is what lets the frontend/judges trust
+the flag instead of it being decorative.
 
-Extension points for M2/M3, stubbed with the real request shape ready to
-fill in (both need actual internet access to run — this dev sandbox is
-locked to a small domain allowlist, so these can't be tested from here,
-but they'll work once deployed):
-  - fetch_marine_weather(): Open-Meteo Marine API (free, no key required)
-    at https://marine-api.open-meteo.com/v1/marine for wave height/period.
-  - fetch_pfz_advisory(): INCOIS's public PFZ advisory feed.
+Data sources:
+  - fetch_marine_weather(): Open-Meteo Marine API (free, no key required),
+    cache-checked first (same lat/lon/date reuses the DB row instead of
+    re-fetching). On any network failure, returns None and the caller
+    falls back to the stub weather text.
+  - fetch_pfz_advisory(): INCOIS has no public programmatic feed, so this
+    falls back to the bundled snapshot GeoJSON in frontend/public/data as
+    "best available" data. This is real geodata but NOT live, so it is
+    never allowed to set is_live=True.
+
+Both need real internet access to hit Open-Meteo — this dev sandbox is
+network-locked to a small allowlist, so the live path can only be tested
+once deployed; the code degrades safely (to the old stub) if the request
+fails, so /chat never crashes because of it.
 """
 
+import json
+import os
 from typing import Optional
 
 from schemas import ChatContext, SafetyInfo, EvidenceItem, MapLayer
+from db import get_cached_advisory, cache_advisory
+
+WEATHER_SOURCE = "open_meteo_marine"
+PFZ_FALLBACK_SOURCE = "pfz_static_fallback"
+
+_FRONTEND_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend", "public", "data")
+_PFZ_SNAPSHOT_FILE = "pfz_kochi_2026-09-11.geojson"
 
 
-def fetch_marine_weather(lat: float, lon: float) -> Optional[dict]:
-    """
-    Real integration point for M2/M3 — not called yet, always returns None.
-    When ready, wire it up like this (wrap in try/except so a network
-    hiccup degrades to the stub instead of crashing /chat mid-demo):
+def fetch_marine_weather(lat: float, lon: float, date: str) -> Optional[dict]:
+    """Live wave-height/period data from Open-Meteo Marine, DB-cached per
+    (lat, lon, date). Returns None on cache miss + fetch failure — callers
+    must treat None as "fall back to the stub", never as an error."""
+    cached = get_cached_advisory(WEATHER_SOURCE, lat, lon, date)
+    if cached is not None:
+        return cached
 
+    try:
         import httpx
         resp = httpx.get(
             "https://marine-api.open-meteo.com/v1/marine",
@@ -38,14 +54,45 @@ def fetch_marine_weather(lat: float, lon: float) -> Optional[dict]:
             timeout=5,
         )
         resp.raise_for_status()
-        return resp.json()
-    """
-    return None
+        data = resp.json()
+    except Exception:
+        return None
+
+    cache_advisory(WEATHER_SOURCE, lat, lon, date, data)
+    return data
 
 
 def fetch_pfz_advisory(lat: float, lon: float, date: str) -> Optional[dict]:
-    """Real integration point for INCOIS PFZ advisory data — not called yet."""
-    return None
+    """No public live INCOIS feed exists, so this reads the bundled PFZ
+    snapshot GeoJSON as 'best available' data and DB-caches the read so
+    repeat requests hit the DB instead of the filesystem. This data is
+    real but NOT live — callers must never derive is_live=True from it."""
+    cached = get_cached_advisory(PFZ_FALLBACK_SOURCE, lat, lon, date)
+    if cached is not None:
+        return cached
+
+    path = os.path.join(_FRONTEND_DATA_DIR, _PFZ_SNAPSHOT_FILE)
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+    cache_advisory(PFZ_FALLBACK_SOURCE, lat, lon, date, data)
+    return data
+
+
+def _avg_wave_height_m(weather: dict) -> Optional[float]:
+    """Pull a simple average wave height (m) out of Open-Meteo's hourly
+    series, if present. Returns None if the shape is unexpected."""
+    try:
+        values = weather["hourly"]["wave_height"]
+        values = [v for v in values if v is not None]
+        if not values:
+            return None
+        return round(sum(values) / len(values), 2)
+    except (KeyError, TypeError, ZeroDivisionError):
+        return None
 
 # Response templates localized by language code or script
 PFZ_RESPONSES = {
@@ -64,9 +111,12 @@ SAFETY_RESPONSES = {
 
 
 def run_planner(context: ChatContext) -> dict:
-    weather = fetch_marine_weather(context.location.lat, context.location.lon)
+    weather = fetch_marine_weather(context.location.lat, context.location.lon, context.date)
     pfz = fetch_pfz_advisory(context.location.lat, context.location.lon, context.date)
-    is_live = weather is not None or pfz is not None
+    # Only a genuine live/cached-live weather fetch counts as "live" — the
+    # PFZ snapshot is real data but a static fallback, never live.
+    is_live = weather is not None
+    avg_wave_m = _avg_wave_height_m(weather) if weather else None
 
     raw_msg = (context.raw_message or "").lower()
     
@@ -95,7 +145,10 @@ def run_planner(context: ChatContext) -> dict:
                     "name": "Potential Fishing Zones (PFZ)",
                     "url": f"/layers/pfz/{context.date}.geojson",
                     "color": "#00e676",
-                    "is_live": is_live
+                    # The /layers/pfz endpoint still serves layer.py's stub
+                    # bbox geometry (out of scope here), so this is always
+                    # honestly False regardless of weather is_live.
+                    "is_live": False
                 }
             )
         ]
@@ -124,19 +177,55 @@ def run_planner(context: ChatContext) -> dict:
         )
         layers = []
 
-    return {
-        "text": text,
-        "safety": SafetyInfo(
-            status="SAFE",
-            reason="Low wave height and light winds in area",
-            is_live=is_live,
-        ),
-        "evidence": [
+    # Derive an honest safety verdict from the real wave data when we have
+    # it; otherwise keep the old synthetic stub text (and is_live=False).
+    if avg_wave_m is not None:
+        if avg_wave_m < 1.25:
+            safety_status = "SAFE"
+        elif avg_wave_m < 2.5:
+            safety_status = "CAUTION"
+        else:
+            safety_status = "UNSAFE"
+        safety_reason = (
+            f"Live Open-Meteo marine data: average wave height ~{avg_wave_m}m "
+            f"off {location_display} today."
+        )
+        evidence = [
+            EvidenceItem(
+                source=WEATHER_SOURCE,
+                summary=f"Open-Meteo marine forecast for {location_display}: avg wave height {avg_wave_m}m.",
+                value=avg_wave_m,
+                is_live=True,
+            )
+        ]
+    else:
+        safety_status = "SAFE"
+        safety_reason = "Low wave height and light winds in area (stub — live weather fetch unavailable)"
+        evidence = [
             EvidenceItem(
                 source="stub",
                 summary=f"Analyzed satellite data for {location_display}.",
-                is_live=is_live,
+                is_live=False,
             )
-        ],
+        ]
+
+    if pfz is not None:
+        evidence.append(
+            EvidenceItem(
+                source=PFZ_FALLBACK_SOURCE,
+                summary=f"Using last available PFZ advisory snapshot for {location_display} (not live).",
+                is_live=False,
+            )
+        )
+
+    return {
+        "text": text,
+        "safety": SafetyInfo(
+            status=safety_status,
+            reason=safety_reason,
+            is_live=is_live,
+            wave_height_m=avg_wave_m,
+        ),
+        "evidence": evidence,
         "layers": layers,
     }

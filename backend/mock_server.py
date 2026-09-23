@@ -21,12 +21,15 @@ from conversation_agent import (
 )
 from planner import run_planner
 from layer import get_layer, VALID_LAYERS
+from db import init_db, log_query
 
 app = FastAPI(title="ORCA Conversation API", version="0.2.0")
+init_db()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -80,7 +83,7 @@ def chat(req: ChatRequest) -> ChatResponse:
 
     result = run_planner(context)
 
-    return ChatResponse(
+    response = ChatResponse(
         text=result["text"],
         language=language,
         safety=result["safety"],
@@ -89,12 +92,26 @@ def chat(req: ChatRequest) -> ChatResponse:
         context=context,
     )
 
+    log_query(
+        message=message,
+        intent=context.intent,
+        location_name=location.name,
+        lat=location.lat,
+        lon=location.lon,
+        date=resolved_date,
+        language=language,
+        response_text=result["text"],
+        is_live=result["safety"].is_live,
+    )
+
+    return response
+
 
 @app.get("/layers/{layer_id}/{date}.geojson")
 def layers(layer_id: str, date: str, lat: float = 9.9312, lon: float = 76.2673):
     if layer_id == "boundaries":
         frontend_data_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "public", "data")
-        target_path = os.path.join(frontend_data_dir, "kerala_coastline.geojson")
+        target_path = os.path.join(frontend_data_dir, "backend/data/kerala_coastline.geojson")
         if not os.path.exists(target_path):
             raise HTTPException(status_code=404, detail="Coastline layer not found")
         with open(target_path, "r", encoding="utf-8-sig") as f:
