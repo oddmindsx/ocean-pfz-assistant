@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ChatWindow from "./ChatWindow";
 import MapPanel from "./MapPanel";
 import SafetyBadge from "./SafetyBadge";
@@ -13,32 +13,11 @@ export default function ChatPage({
   safety,
   evidence,
   targetLayer,
-  theme
+  theme,
+  userLocation
 }) {
-  const [userCoords, setUserCoords] = useState(null);
-
-  // Acquire GPS position when the component mounts
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserCoords({
-            name: "Current Location",
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.warn("Geolocation warning/error:", error.message);
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    }
-  }, []);
-
   const handleSendMessage = (text) => {
-    // Pass both the message text and the location object to parent/handler
-    onSendMessage(text, userCoords);
+    onSendMessage(text);
   };
 
   return (
@@ -61,7 +40,7 @@ export default function ChatPage({
 
       <section className="chat-map-card">
         <div className="chat-map-preview">
-          <MapPanel targetLayer={targetLayer} userLocation={userCoords} />
+          <MapPanel targetLayer={targetLayer} userLocation={userLocation} />
         </div>
         <div className="chat-map-info">
           <SafetyBadge safety={safety} />
