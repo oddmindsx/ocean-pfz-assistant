@@ -21,8 +21,10 @@ from conversation_agent import (
 )
 from planner import run_planner
 from layer import get_layer, VALID_LAYERS
+from db import init_db, log_query
 
 app = FastAPI(title="ORCA Conversation API", version="0.2.0")
+init_db()
 
 app.add_middleware(
     CORSMiddleware,
@@ -80,7 +82,7 @@ def chat(req: ChatRequest) -> ChatResponse:
 
     result = run_planner(context)
 
-    return ChatResponse(
+    response = ChatResponse(
         text=result["text"],
         language=language,
         safety=result["safety"],
@@ -88,6 +90,20 @@ def chat(req: ChatRequest) -> ChatResponse:
         layers=result["layers"],
         context=context,
     )
+
+    log_query(
+        message=message,
+        intent=context.intent,
+        location_name=location.name,
+        lat=location.lat,
+        lon=location.lon,
+        date=resolved_date,
+        language=language,
+        response_text=result["text"],
+        is_live=result["safety"].is_live,
+    )
+
+    return response
 
 
 @app.get("/layers/{layer_id}/{date}.geojson")
