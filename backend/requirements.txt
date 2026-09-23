@@ -4,4 +4,4 @@ pydantic
 langdetect
 rapidfuzz
 httpx
-sqlalchemy
+sqlalchemy 
