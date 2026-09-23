@@ -24,15 +24,15 @@ export default function SafetyBadge({ safety }) {
         <div className="safety-metrics">
           <div className="metric-item" title="Significant Wave Height">
             <Waves size={16} />
-            <span>{safety.wave_height_m || 1.4} m</span>
+            <span>{safety.wave_height_m != null ? `${safety.wave_height_m} m` : "N/A"}</span>
           </div>
           <div className="metric-item" title="Wind Speed">
             <Wind size={16} />
-            <span>{safety.wind_speed_knots || 11} kts</span>
+            <span>{safety.wind_speed_knots != null ? `${safety.wind_speed_knots} kts` : "N/A"}</span>
           </div>
         </div>
       </div>
-      {safety.advice && <p className="safety-advice">{safety.advice}</p>}
+      {safety.reason && <p className="safety-advice">{safety.reason}</p>}
     </div>
   );
 }
