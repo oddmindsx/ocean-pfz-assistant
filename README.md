@@ -14,17 +14,20 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn mock_server:app --reload --port 8000
 
 The backend will run at http://localhost:8000
+(mock_server.py is the complete server — it has session carry-over, the
+/layers endpoint the map needs, and confidence scores. main.py is a
+simpler/older entry point kept for reference.)
 
 ## Frontend Setup
 
 cd frontend
 npm install
-npm start
+npm run dev
 
-The frontend will run at http://localhost:3000 and calls the backend at http://localhost:8000
+The frontend will run at http://localhost:5173 and calls the backend at http://localhost:8000
 
 ## API Contract
 
