@@ -17,8 +17,7 @@ Import surface used by the rest of the app:
 import os
 import json
 from datetime import datetime, timezone
-
-from sqlalchemy import create_engine, Column, Integer, Float, String, Boolean, DateTime, Text
+from sqlalchemy import create_engine, Column, Integer, Float, String, Boolean, DateTime, Text, Index
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./orca.db")
@@ -48,7 +47,9 @@ class QueryLog(Base):
 
 class AdvisoryCache(Base):
     __tablename__ = "advisory_cache"
-
+    __table_args__ = (
+        Index("idx_cache_lookup", "source", "lat", "lon", "date"),
+    )
     id = Column(Integer, primary_key=True, autoincrement=True)
     source = Column(String, nullable=False)   # e.g. "open_meteo_marine", "pfz_incois"
     lat = Column(Float, nullable=False)
@@ -90,18 +91,20 @@ def log_query(
         )
         session.add(row)
         session.commit()
-    except Exception:
+
+    except Exception as e:
+    # Swallow logging failures — a broken DB write should never break /chat.
         session.rollback()
-        # Swallow logging failures — a broken DB write should never break /chat.
+        print(f"[Warning] Failed to log query to DB: {e}")
+        
     finally:
         session.close()
 
-
-def _round(val: float, ndigits: int = 2) -> float:
-    """Cache lookups round coordinates slightly so nearby points share a cache
-    entry instead of missing on every tiny GPS jitter."""
-    return round(val, ndigits)
-
+def _format_coord(val: float, ndigits: int = 2) -> str:
+    """Format coordinates to a fixed precision string for deterministic cache keying."""
+    if val is None:
+        return ""
+    return f"{float(val):.{ndigits}f}"
 
 def get_cached_advisory(source: str, lat: float, lon: float, date: str) -> dict | None:
     """Return a same-day cached payload for (source, lat, lon, date), or None."""
