@@ -30,6 +30,7 @@ init_db()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -52,7 +53,9 @@ def chat(req: ChatRequest) -> ChatResponse:
         location_source = "device_gps"
     else:
         loc_dict = extract_location(message)
-        location = Location(name=loc_dict["name"], lat=loc_dict["lat"], lon=loc_dict["lon"])
+        location = Location(
+            name=loc_dict["name"], lat=loc_dict["lat"], lon=loc_dict["lon"]
+        )
         location_source = loc_dict["method"]
 
     resolved_date = req.date if req.date else get_default_date()
