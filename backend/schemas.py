@@ -42,6 +42,8 @@ class SafetyInfo(BaseModel):
     reason: str = ""
     alerts: List[str] = Field(default_factory=list)
     is_live: bool = False  # False until a real weather/ocean data source is wired in
+    wave_height_m: Optional[float] = None  # real avg wave height when live weather is available
+    wind_speed_knots: Optional[float] = None  # Open-Meteo Marine doesn't return wind; stays None honestly
 
 
 class EvidenceItem(BaseModel):
