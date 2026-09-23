@@ -1,7 +1,15 @@
-// This is the address of our backend server
-const API_BASE_URL = "http://localhost:8000"; 
+// Address of backend server (can also read from Vite env variables)
+const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || "http://localhost:8000";
 
+// Helper to get today's ISO date string (YYYY-MM-DD)
+const getTodayIsoDate = () => new Date().toISOString().split("T")[0];
+
+/**
+ * Sends chat prompt and context to the FastAPI /chat endpoint.
+ */
 export async function sendMessage(prompt, context) {
+  const currentDate = context?.date || getTodayIsoDate();
+
   try {
     const response = await fetch(`${API_BASE_URL}/chat`, {
       method: "POST",
@@ -11,7 +19,7 @@ export async function sendMessage(prompt, context) {
       body: JSON.stringify({
         message: prompt,
         location: context?.location || { name: "Kochi", lat: 9.9312, lon: 76.2673 },
-        date: context?.date || "2026-09-20",
+        date: currentDate,
       }),
     });
 
@@ -21,68 +29,91 @@ export async function sendMessage(prompt, context) {
 
     const data = await response.json();
 
-    // Transform layers if returned in Pydantic schema format
+    // Format and sanitize layers returned by backend schema
     const formattedLayers = (data.layers || []).map((layer, index) => {
+      // If layer is already in frontend MapLayer shape (has id and url)
+      if (layer.id && layer.url) {
+        return layer;
+      }
+      // Handle nested Pydantic data payloads or raw layer_type models
       if (layer.data && layer.data.url) {
         return layer.data;
       }
+      const layerId = (layer.layer_type || `layer-${index}`).toLowerCase();
       return {
-        id: layer.layer_type?.toLowerCase() || `layer-${index}`,
-        name: layer.layer_type || "Ocean Data Layer",
-        url: `/layers/${(layer.layer_type || "pfz").toLowerCase()}/${context?.date || "2026-09-20"}.geojson`,
-        color: layer.layer_type === "SAFETY_CHECK" ? "#ff1744" : "#00e676"
+        id: layerId,
+        name: layer.name || layer.layer_type || "Ocean Data Layer",
+        url: layer.url || `/layers/${layerId}/${currentDate}.geojson`,
+        color: layer.color || (layerId === "safety_check" ? "#ff1744" : "#00e676"),
+        is_live: layer.is_live ?? false,
       };
     });
 
-    // Backend sends evidence as a List[EvidenceItem] (source/summary/value/is_live),
-    // not an object — pass it through as-is instead of coercing to {}, which
-    // previously caused EvidenceCard to always show its hardcoded placeholders.
     return {
       text: data.text || "Received ocean advisory.",
       safety: data.safety || { status: "SAFE", reason: "Conditions clear." },
       evidence: data.evidence || [],
       layers: formattedLayers,
-      isMock: false
+      context: data.context || null,
+      isMock: false,
     };
-
   } catch (error) {
     console.warn("Could not reach backend server, falling back to mock response:", error);
     return {
-      text: `[Offline Mode] Query: "${prompt}". Server issue or connection dropped.`,
+      text: `[Offline Mode] Query: "${prompt}". Backend unreachable.`,
       safety: { status: "SAFE", reason: "Displaying fallback parameters." },
       evidence: [],
       layers: [],
-      isMock: true
+      context: null,
+      isMock: true,
     };
   }
 }
 
+/**
+ * Direct chat invocation for quick messages or GPS position updates.
+ */
 export async function sendChatMessage(message, location = null) {
-  const response = await fetch("http://localhost:8000/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message: message,
-      user_id: "default_user",
-      location: location // <-- If null, backend falls back; if object, backend uses device GPS
-    }),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        user_id: "default_user",
+        location: location, // Passed GPS object or null
+      }),
+    });
 
-  return await response.json();
+    if (!response.ok) {
+      throw new Error(`Server status error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error in sendChatMessage:", error);
+    return null;
+  }
 }
 
-export async function fetchLayerGeoJson(url) {
+/**
+ * Fetches GeoJSON data for map overlays.
+ */
+export async function fetchLayerGeoJson(urlOrId) {
   try {
-    const fullUrl = url.startsWith("http") ? url : `http://localhost:8000${url}`;
+    const isUrl = urlOrId.includes("/") || urlOrId.endsWith(".geojson");
+    const targetPath = isUrl ? urlOrId : `/layers/${urlOrId}/${getTodayIsoDate()}.geojson`;
+    const fullUrl = targetPath.startsWith("http") ? targetPath : `${API_BASE_URL}${targetPath}`;
+
     const response = await fetch(fullUrl);
     if (!response.ok) {
       throw new Error(`Failed to fetch GeoJSON: ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
-    console.error("Error fetching GeoJSON layer:", error);
+    console.error(`Error fetching GeoJSON layer (${urlOrId}):`, error);
     return null;
   }
 }
