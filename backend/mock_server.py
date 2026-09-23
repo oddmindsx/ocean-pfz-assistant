@@ -29,6 +29,7 @@ init_db()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -110,7 +111,7 @@ def chat(req: ChatRequest) -> ChatResponse:
 def layers(layer_id: str, date: str, lat: float = 9.9312, lon: float = 76.2673):
     if layer_id == "boundaries":
         frontend_data_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "public", "data")
-        target_path = os.path.join(frontend_data_dir, "kerala_coastline.geojson")
+        target_path = os.path.join(frontend_data_dir, "backend/data/kerala_coastline.geojson")
         if not os.path.exists(target_path):
             raise HTTPException(status_code=404, detail="Coastline layer not found")
         with open(target_path, "r", encoding="utf-8-sig") as f:
