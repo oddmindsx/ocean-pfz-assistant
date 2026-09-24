@@ -114,8 +114,8 @@ def get_cached_advisory(source: str, lat: float, lon: float, date: str) -> dict 
             session.query(AdvisoryCache)
             .filter(
                 AdvisoryCache.source == source,
-                AdvisoryCache.lat == _round(lat),
-                AdvisoryCache.lon == _round(lon),
+                AdvisoryCache.lat == round(lat),
+                AdvisoryCache.lon == round(lon),
                 AdvisoryCache.date == date,
             )
             .order_by(AdvisoryCache.fetched_at.desc())
@@ -138,8 +138,8 @@ def cache_advisory(source: str, lat: float, lon: float, date: str, payload: dict
     try:
         row = AdvisoryCache(
             source=source,
-            lat=_round(lat),
-            lon=_round(lon),
+            lat = round(lat),
+            lon = round(lon),
             date=date,
             payload_json=json.dumps(payload),
         )
