@@ -5,3 +5,4 @@ langdetect
 rapidfuzz
 httpx
 sqlalchemy
+python-dotenv
