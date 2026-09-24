@@ -120,3 +120,17 @@ def layers(layer_id: str, date: str, lat: float = 9.9312, lon: float = 76.2673):
     if layer_id not in VALID_LAYERS:
         raise HTTPException(status_code=404, detail=f"Unknown layer_id. Valid: {sorted(VALID_LAYERS)}")
     return JSONResponse(get_layer(layer_id, date, lat, lon))
+
+@app.get("/data/{filename}")
+async def get_geojson_layer(filename: str):
+    # Construct base path inside backend/data or backend folder
+    file_path = os.path.join("data", filename)
+    fallback_path = os.path.join("data", "pfz_kochi_default.geojson") # or static sample file
+    
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    elif os.path.exists(fallback_path):
+        # Serve default sample layer instead of throwing 404
+        return FileResponse(fallback_path)
+    else:
+        raise HTTPException(status_code=404, detail="GeoJSON layer not found")
