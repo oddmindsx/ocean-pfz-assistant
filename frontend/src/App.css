@@ -991,24 +991,161 @@ body {
    DECORATIVE DOT LANGUAGE
    ============================================================ */
 
-.decor-corner {
+/* Ocean decorations inside the chat card (behind the content) */
+
+.decor-water,
+.decor-seabed,
+.decor-dolphin {
   position: absolute;
 
   pointer-events: none;
+  user-select: none;
 
-  opacity: 0.75;
-
-  z-index: 4;
+  z-index: 0;
 }
 
-.decor-top-left {
-  top: -8px;
-  left: -4px;
+.chat-window-container {
+  position: relative;
+
+  z-index: 1;
 }
 
-.decor-bottom-left {
-  bottom: 10px;
+/* top-left: rippling water; header text is nudged right to clear it */
+.decor-water {
+  top: 0;
+  left: 0;
+
+  width: 104px;
+  height: auto;
+
+  opacity: 0.92;
+}
+
+.chat-card .chat-header {
+  padding-left: 104px;
+}
+
+/* bottom-left: coral, starfish and shell */
+.decor-seabed {
+  bottom: 12px;
   left: 16px;
+
+  width: 190px;
+  height: 110px;
+}
+
+.decor-seabed img {
+  position: absolute;
+
+  bottom: 0;
+
+  height: auto;
+}
+
+.decor-coral {
+  left: 46px;
+
+  width: 92px;
+}
+
+.decor-starfish {
+  left: 0;
+
+  width: 44px;
+
+  transform: rotate(-12deg);
+}
+
+.decor-shell {
+  left: 130px;
+
+  width: 56px;
+}
+
+.decor-bubble {
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px solid rgba(39, 184, 214, 0.5);
+
+  animation: decor-bubble-drift 7s ease-in-out infinite;
+}
+
+.decor-bubble-1 {
+  left: 118px;
+  bottom: 96px;
+
+  width: 11px;
+  height: 11px;
+}
+
+.decor-bubble-2 {
+  left: 128px;
+  bottom: 80px;
+
+  width: 7px;
+  height: 7px;
+
+  animation-delay: -2.4s;
+}
+
+.decor-bubble-3 {
+  left: 30px;
+  bottom: 72px;
+
+  width: 8px;
+  height: 8px;
+
+  animation-delay: -4.6s;
+}
+
+/* bottom-right: small dolphin */
+.decor-dolphin {
+  right: 18px;
+  bottom: 14px;
+
+  width: 66px;
+  height: auto;
+
+  transform: rotate(8deg);
+}
+
+@keyframes decor-bubble-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decor-bubble {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .decor-water {
+    width: 72px;
+  }
+
+  .chat-card .chat-header {
+    padding-left: 76px;
+  }
+
+  .decor-seabed {
+    transform: scale(0.75);
+    transform-origin: bottom left;
+  }
+
+  .decor-dolphin {
+    display: none;
+  }
 }
 
 .dot-cluster {
