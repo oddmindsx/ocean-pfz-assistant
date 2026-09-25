@@ -10,7 +10,7 @@ import json
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from schemas import ChatRequest, ChatResponse, ChatContext, Location
 from conversation_agent import (
